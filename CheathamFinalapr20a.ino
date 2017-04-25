@@ -16,8 +16,8 @@ const int drivePin3  = 10; // Pin  7 of L293
 const int drivePin4  = 9;  // Pin  2 of L293
 
 //Ping sensor settings
-const int pingPin = 11;  // pin connected to Echo Pin in the ultrasonic distance sensor
-const int trigPin  = 12; // pin connected to trig Pin in the ultrasonic distance sensor
+const int pingPin = 12;  // pin connected to Echo Pin in the ultrasonic distance sensor
+const int trigPin  = 13; // pin connected to trig Pin in the ultrasonic distance sensor
 
 //This will run only one time.
 void setup(){
@@ -55,14 +55,28 @@ void setup(){
     //And this code will stop motors
     strt();
     halt();
-
+    Serial.begin (9600);
 }
 
 
 void loop(){
-  
+  //checks distance of objects in front
+  int cm = ping(pingPin) ; 
+  Serial.println (cm);
 
+//if there's more than 100 cm space go forward
+  if(cm > 100){
+    forward();
+  }
+    else{
+//if there's less than 100 cm space go left and back
+      left();
+      backward();
+      delay(2000);
+    }
+  delay(1000);  
 }
+
 // This section sets motor controls
 
 //roll forward
@@ -129,5 +143,6 @@ long microsecondsToCentimeters(long microseconds)
    // The ping travels out and back, so to find the distance of the 
    // object we take half of the distance travelled. 
    return microseconds / 29 / 2; 
+}
 
 
