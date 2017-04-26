@@ -1,4 +1,4 @@
-/*MotorPower test
+/*Final project run R/C car from arduino
  * James Cheatham
  * 20April17
  */
@@ -33,8 +33,8 @@ void setup(){
     pinMode(trigPin, OUTPUT);//Set the connection pin output mode trog pin
     
     
-    //Motor Control - Motor A: motorPin1,motorpin2 & Motor B: motorpin3,motorpin4
-
+  
+//This code cycles both motors forward and backwards once
     //This code  will turn Motor A clockwise for 2 sec.
     forward();
     delay(2000); 
@@ -64,15 +64,26 @@ void loop(){
   int cm = ping(pingPin) ; 
   Serial.println (cm);
 
-//if there's more than 100 cm space go forward
-  if(cm > 100){
+  //if there's more than 100 cm space go forward
+  if(cm > 50){
     forward();
   }
     else{
 //if there's less than 100 cm space go left and back
-      left();
-      backward();
-      delay(2000);
+      long rnum;
+      rnum = random(11);//generates a random number between 1 and 10
+      Serial.println (rnum);
+      //in rnum is 1-5 then backup and turn right otherwise turn left
+      if (rnum<5){
+        right();
+        backward();
+      }
+      else{
+        left();
+        backward();
+      }
+
+      strt();
     }
   delay(1000);  
 }
@@ -114,8 +125,10 @@ void strt(){
   digitalWrite (drivePin3, LOW);
   digitalWrite (drivePin4, LOW);
 }
-//not my code
-int ping(int pingPin) 
+
+
+//not my code used to detect distance
+int ping(int pingPin) //code from adeept
 { 
    // establish variables for duration of the ping, 
    // and the distance result in inches and centimeters: 
@@ -137,7 +150,7 @@ int ping(int pingPin)
    return cm ; 
 } 
 
-long microsecondsToCentimeters(long microseconds) 
+long microsecondsToCentimeters(long microseconds)//code from adeept 
 { 
    // The speed of sound is 340 m/s or 29 microseconds per centimeter. 
    // The ping travels out and back, so to find the distance of the 
